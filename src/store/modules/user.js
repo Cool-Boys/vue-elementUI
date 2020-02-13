@@ -4,6 +4,8 @@ import router, { resetRouter } from '@/router'
 
 const state = {
   token: getToken(),
+  userId: '',
+  roleId: '',
   name: '',
   avatar: '',
   introduction: '',
@@ -25,6 +27,12 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_ROLEID: (state, roleId) => {
+    state.roleId = roleId
+  },
+  SET_USERID: (state, userId) => {
+    state.userId = userId
   }
 }
 
@@ -34,6 +42,7 @@ const actions = {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
+        debugger
         const { data } = response
         commit('SET_TOKEN', data.token)
         setToken(data.token)
@@ -48,24 +57,28 @@ const actions = {
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
+        debugger
         const { data } = response
 
         if (!data) {
-          reject('Verification failed, please Login again.')
+          reject('验证失败，请重新登录.')
         }
 
-        const { roles, name, avatar, introduction } = data
+        const resData = JSON.parse(data)
+        // resData.roles = ['admin']
+        const { sname, roles } = resData
 
         // roles must be a non-empty array
-        if (!roles || roles.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
-        }
-
+        // if (!roles || roles.length <= 0) {
+        //   reject('getInfo: roles must be a non-null array!')
+        // }
+        commit('SET_USERID', resData.usersId)
+        commit('SET_ROLEID', resData.roleId)
         commit('SET_ROLES', roles)
-        commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
-        commit('SET_INTRODUCTION', introduction)
-        resolve(data)
+        commit('SET_NAME', sname)
+        commit('SET_AVATAR', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')
+        commit('SET_INTRODUCTION', 'admin')
+        resolve(resData)
       }).catch(error => {
         reject(error)
       })

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
+import qs from 'qs'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
@@ -14,7 +15,9 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // do something before request is sent
-
+    if (config.method === 'post') {
+      config.data = qs.stringify(config.data)
+    }
     if (store.getters.token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
@@ -43,10 +46,11 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
-    const res = response.data
+    const resData = decodeURIComponent(response.data)
+    const res = JSON.parse(resData)
 
     // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 20000) {
+    if (res.errcode === -1) {
       Message({
         message: res.message || 'Error',
         type: 'error',
