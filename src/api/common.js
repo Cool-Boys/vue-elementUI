@@ -14,3 +14,11 @@ export function selectDlGroup(query) {
     params: query
   })
 }
+
+export function selectRole(query) {
+  return request({
+    url: '/common/selectRole',
+    method: 'get',
+    params: query
+  })
+}

@@ -135,15 +135,16 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/profile',
+    path: '/agent',
     component: Layout,
-    redirect: '/profile/index',
+    redirect: '@/views/users/index',
     hidden: false,
     children: [
       {
         path: 'index',
-        component: () => import('@/views/profile/index'),
-        name: 'Profile',
+        // component: () => import('@/views/profile/index'),
+        component: () => import('@/views/users/index'),
+        name: 'Agent',
         meta: { title: '代理管理', icon: 'user', noCache: true }
       }
     ]
