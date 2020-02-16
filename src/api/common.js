@@ -22,3 +22,11 @@ export function selectRole(query) {
     params: query
   })
 }
+
+export function selectUsers(query) {
+  return request({
+    url: '/common/selectUsers',
+    method: 'get',
+    params: query
+  })
+}

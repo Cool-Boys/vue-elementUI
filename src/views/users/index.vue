@@ -65,7 +65,17 @@
 
       <el-table-column label="QQ号" width="100">
         <template slot-scope="{row}">
-          <span>{{ row.QQ }}</span>
+          <span>{{ row.qq }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="微信号" width="120">
+        <template slot-scope="{row}">
+          <span>{{ row.wx }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="手机号" width="120">
+        <template slot-scope="{row}">
+          <span>{{ row.phonum }}</span>
         </template>
       </el-table-column>
       <el-table-column label="备注" width="100">
@@ -81,7 +91,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" align="center" width="330" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" width="300" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
@@ -101,13 +111,13 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagesize" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :inline="true" :rules="rules" :model="temp" label-position="right" label-width="150px">
+      <el-form ref="dataForm" :inline="true" :rules="rules" :model="temp" label-position="right" label-width="120px">
         <el-form-item label="用户名称" prop="sname">
           <el-input v-model="temp.sname" placeholder="请输入用户名称" />
         </el-form-item>
-        <el-form-item label="余额" prop="amount">
+        <!-- <el-form-item label="余额" prop="amount">
           <el-input v-model="temp.amount" placeholder="请输入用户余额" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="代理级别" prop="roleId">
           <el-select v-model="temp.roleId" class="filter-item" placeholder="请选择代理级别">
             <el-option v-for="item in selectRoleOptions" :key="item.value" :label="item.label" :value="item.value" />
@@ -162,7 +172,7 @@ export default {
     statusFilter1(status) {
       const statusMap = {
         1: '使用',
-        0: '待定',
+        0: '删除',
         2: '禁用'
       }
       return statusMap[status]
@@ -170,21 +180,19 @@ export default {
     statusFilter(status) {
       const statusMap = {
         使用: 'success',
-        暂定: 'info',
+        删除: 'info',
         禁用: 'danger'
       }
       return statusMap[status]
     },
     rounding(value) {
-      debugger
-      console.log(value)
       return parseFloat(value === '' ? 0 : value).toFixed(2)
     }
   },
   data() {
     var checkPrice = (rule, value, callback) => {
       const reg = /^[+-]?(0|([1-9]\d*))(\.\d+)?$/g
-      if (!value) {
+      if (!value && value !== 0) {
         return callback(new Error('输入不能为空'))
       }
       setTimeout(() => {
@@ -291,6 +299,7 @@ export default {
     handleModifyStatus(row, bdel) {
       const tempData = {}
       tempData.usersId = row.usersId
+      tempData.bdel = bdel
       update({ bean: JSON.stringify(tempData) }).then(() => {
         this.$message({
           message: '操作成功！',
@@ -333,12 +342,13 @@ export default {
     createData() {
       console.log(this.temp)
       this.$refs['dataForm'].validate((valid) => {
-        debugger
         if (valid) {
           insert({ bean: JSON.stringify(this.temp) }).then(response => {
-            const selectName = this.selectPlatOptions.find(val => val.value === this.temp.platformId).label
-            console.log(selectName)
-            this.temp.platformIdName = selectName
+            const selectRName = this.selectRoleOptions.find(val => val.value === this.temp.roleId).label
+            const selectGName = this.selectDlGroupOptions.find(val => val.value === this.temp.groupId).label
+            console.log(selectRName)
+            this.temp.roleIdName = selectRName
+            this.temp.groupIdName = selectGName
             this.list.unshift(this.temp)
             this.dialogFormVisible = false
             this.$notify({
@@ -365,9 +375,13 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           update({ bean: JSON.stringify(tempData) }).then(() => {
-            const index = this.list.findIndex(v => v.id === this.temp.id)
-            const selectName = this.selectPlatOptions.find(val => val.value === this.tempData.platformId).label
-            this.temp.platformIdName = selectName
+            const index = this.list.findIndex(v => v.usersId === this.temp.usersId)
+            const selectRName = this.selectRoleOptions.find(val => val.value === this.temp.roleId).label
+            const selectGName = this.selectDlGroupOptions.find(val => val.value === this.temp.groupId).label
+            console.log(selectRName)
+            console.log(selectGName)
+            this.temp.roleIdName = selectRName
+            this.temp.groupIdName = selectGName
             this.list.splice(index, 1, this.temp)
             this.dialogFormVisible = false
             this.$notify({
@@ -410,7 +424,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped >
+<style scoped>
 .el-input--medium .el-input__inner{
 width: 170px;
 }

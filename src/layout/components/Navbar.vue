@@ -25,7 +25,7 @@
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/profile/index">
-            <el-dropdown-item>我的</el-dropdown-item>
+            <el-dropdown-item>{{ userName }}</el-dropdown-item>
           </router-link>
           <router-link to="/">
             <el-dropdown-item>首页</el-dropdown-item>
@@ -53,6 +53,7 @@ import ErrorLog from '@/components/ErrorLog'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
+import store from '@/store'
 
 export default {
   components: {
@@ -63,6 +64,9 @@ export default {
     SizeSelect,
     Search
   },
+  data() {
+    return { userName: store.getters.name }
+  },
   computed: {
     ...mapGetters([
       'sidebar',
@@ -72,6 +76,7 @@ export default {
   },
   methods: {
     toggleSideBar() {
+      console.log(this.userName)
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {

@@ -125,12 +125,14 @@ export const constantRoutes = [
     path: '/guide',
     component: Layout,
     redirect: '/guide/index',
+    alwaysShow: true,
+    meta: { title: '财务管理', icon: 'guide', noCache: true },
     children: [
       {
         path: 'index',
-        component: () => import('@/views/guide/index'),
+        component: () => import('@/views/rechrecord/index'),
         name: 'Guide',
-        meta: { title: '财务管理', icon: 'guide', noCache: true }
+        meta: { title: '充值管理', noCache: true }
       }
     ]
   },
