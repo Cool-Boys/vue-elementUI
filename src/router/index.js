@@ -131,8 +131,14 @@ export const constantRoutes = [
       {
         path: 'index',
         component: () => import('@/views/rechrecord/index'),
-        name: 'Guide',
+        name: 'Rechrecord',
         meta: { title: '充值管理', noCache: true }
+      },
+      {
+        path: 'transferindex',
+        component: () => import('@/views/rechrecord/transferindex'),
+        name: 'Transferindex',
+        meta: { title: '转账管理', noCache: true }
       }
     ]
   },

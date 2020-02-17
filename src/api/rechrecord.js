@@ -37,3 +37,12 @@ export function deleteData(query) {
     params: query
   })
 }
+
+export function saveTraf(data) {
+  return request({
+    url: '/TrechRecord/saveTraf',
+    method: 'post',
+    data
+  })
+}
+

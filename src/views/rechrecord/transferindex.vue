@@ -6,7 +6,7 @@
         查询
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
-        添加
+        转账
       </el-button>
       <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">
         导出
@@ -29,9 +29,9 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="用户名称" min-width="150px">
+      <el-table-column label="转账用户" min-width="150px">
         <template slot-scope="{row}">
-          <span class="link-type">{{ row.userIdName }}</span>
+          <span class="link-type">{{ row.touserIdName }}</span>
         </template>
       </el-table-column>
       <el-table-column label="交易单号" min-width="100px">
@@ -39,7 +39,7 @@
           <span>{{ row.sernum }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="充值金额" min-width="100px">
+      <el-table-column label="转账金额" min-width="100px">
         <template slot-scope="{row}">
           <span>{{ row.amount|rounding }}</span>
         </template>
@@ -71,21 +71,22 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagesize" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 300px; margin-left:50px;">
-        <el-form-item label="用户名称" prop="userId">
-          <el-select v-model="temp.userId" filterable class="filter-item" placeholder="请选择用户">
+      <el-form ref="dataForm" v-loading="formLoading" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 300px; margin-left:50px;">
+        <el-form-item label="转账用户" prop="touserId">
+          <el-select v-model="temp.touserId" filterable class="filter-item" placeholder="请选择转账用户">
             <el-option v-for="item in selectOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="充值金额" prop="amount">
-          <el-input v-model="temp.amount" placeholder="请填写充值金额" />
+        <el-form-item label="转账金额" prop="amount">
+          <el-input v-model="temp.amount" placeholder="请填写转账金额" />
         </el-form-item>
+        余额：<el-tag type="success">{{ ye|rounding }}</el-tag>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
           取消
         </el-button>
-        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+        <el-button type="primary" @click="createData()">
           提交
         </el-button>
       </div>
@@ -96,7 +97,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { findByWhere, insert, update, deleteData } from '@/api/rechrecord'
+import { findByWhere, saveTraf, update, deleteData } from '@/api/rechrecord'
+import { getInfo } from '@/api/user'
 import { selectUsers } from '@/api/common'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -131,6 +133,7 @@ export default {
       return statusMap[status]
     },
     flagFilter(status) {
+      console.log(status)
       const statusMap = {
         1: 'success',
         2: 'danger'
@@ -160,26 +163,31 @@ export default {
         //   }
 
         // }
-      }, 1000)
+      }, 300)
     }
     return {
       tableKey: 0,
       list: null,
       total: 0,
       listLoading: true,
+      formLoading: true,
       listQuery: {
         page: 1,
         pagesize: 20,
         sernum: undefined,
+        flag: 2,
         userId: store.getters.userId
       },
       selectOptions: null,
       showReviewer: false,
+      am: 0,
+      ye: 0,
       temp: {
         id: undefined,
-        userId: '',
+        userId: store.getters.userId,
+        touserId: '',
         amount: '',
-        flag: '1'
+        flag: '2'
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -190,9 +198,13 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        amount: [{ required: true, validator: checkPrice, trigger: 'blur' }],
-        userId: [
-          { required: true, message: '请选择用户', trigger: 'change' }
+        amount: [
+          // { min: 0, max: 1, message: '转账金额输入0-' + this.ye + '之间', trigger: 'blur' },
+          { required: true, validator: checkPrice, trigger: 'blur' }
+
+        ],
+        touserId: [
+          { required: true, message: '请选择转账用户', trigger: 'change' }
         ]
       },
       downloadLoading: false
@@ -203,7 +215,9 @@ export default {
     ...mapGetters([
       'name'
     ])
+
   },
+
   created() {
     this.getList()
     this.initData()
@@ -223,7 +237,6 @@ export default {
     },
     initData() {
       selectUsers({ userId: store.getters.userId }).then(response => {
-        debugger
         this.selectOptions = response.data
         setTimeout(() => {
           this.listLoading = false
@@ -255,15 +268,28 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
-        userId: '',
+        userId: store.getters.userId,
+        touserId: '',
         amount: '',
-        flag: '1'
+        flag: '2'
       }
     },
     handleCreate() {
       this.resetTemp()
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
+      this.formLoading = true
+      getInfo(store.getters.token).then(response => {
+        debugger
+        const { data } = response
+        const resData = JSON.parse(data)
+        const { amount } = resData
+        this.ye = amount
+        setTimeout(() => {
+          this.formLoading = false
+        }, 1 * 500)
+      })
+
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
@@ -273,7 +299,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         debugger
         if (valid) {
-          insert({ bean: JSON.stringify(this.temp) }).then(response => {
+          saveTraf({ bean: JSON.stringify(this.temp) }).then(response => {
             // const selectName = this.selectOptions.find(val => val.value === this.temp.userId).label
             // console.log(selectName)
             // this.temp.userIdName = selectName

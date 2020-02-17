@@ -48,7 +48,7 @@ service.interceptors.response.use(
   response => {
     const resData = decodeURIComponent(response.data)
     const res = JSON.parse(resData)
-
+    debugger
     // if the custom code is not 20000, it is judged as an error.
     if (res.errcode === -1) {
       Message({
@@ -60,9 +60,9 @@ service.interceptors.response.use(
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
       if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
         // to re-login
-        MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-          confirmButtonText: 'Re-Login',
-          cancelButtonText: 'Cancel',
+        MessageBox.confirm('登录过期，您可以取消以停留在此页，或重新登录', '确认注销', {
+          confirmButtonText: '重新登录',
+          cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           store.dispatch('user/resetToken').then(() => {
