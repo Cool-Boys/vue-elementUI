@@ -22,6 +22,10 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
+      <el-table-column
+        type="index"
+        :index="1"
+      />
       <el-table-column v-if="showReviewer" label="ID" prop="usersId" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
         <template slot-scope="{row}">
           <span>{{ row.usersId }}</span>
@@ -37,7 +41,7 @@
           <span>{{ row.roleId }}</span>
         </template>
       </el-table-column> -->
-      <el-table-column label="用户名称" min-width="150px">
+      <el-table-column label="用户名称" min-width="130px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.sname }}</span>
         </template>
@@ -91,7 +95,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" align="center" width="300" class-name="small-padding fixed-width">
+      <el-table-column fixed="right" label="操作" align="center" width="250" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button type="primary" size="mini" @click="handleUpdate(row)">
             编辑
@@ -279,13 +283,13 @@ export default {
       })
     },
     initData() {
-      selectRole().then(response => {
+      selectRole({ roleId: this.roleId }).then(response => {
         this.selectRoleOptions = response.data
         setTimeout(() => {
           this.listLoading = false
         }, 1 * 500)
       })
-      selectDlGroup().then(response => {
+      selectDlGroup({ userId: this.userId }).then(response => {
         this.selectDlGroupOptions = response.data
         setTimeout(() => {
           this.listLoading = false

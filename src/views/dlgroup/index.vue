@@ -125,6 +125,7 @@ export default {
       listQuery: {
         page: 1,
         pagesize: 20,
+        userId: store.getters.userId,
         sname: undefined
       },
       sdate: '',

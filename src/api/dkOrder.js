@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function findByPage(data) {
   return request({
-    url: '/TplatformPrice/findByPage',
+    url: '/TdkOrder/findByPage',
     method: 'post',
     data
   })
@@ -10,14 +10,14 @@ export function findByPage(data) {
 
 export function findByWhere(query) {
   return request({
-    url: '/TplatformPrice/findByWhere',
+    url: '/TdkOrder/findByWhere',
     method: 'get',
     params: query
   })
 }
 export function insert(data) {
   return request({
-    url: '/TplatformPrice/insert',
+    url: '/TdkOrder/insert',
     method: 'post',
     data
   })
@@ -25,37 +25,31 @@ export function insert(data) {
 
 export function update(data) {
   return request({
-    url: '/TplatformPrice/update',
+    url: '/TdkOrder/update',
     method: 'post',
     data
   })
 }
 export function deleteData(query) {
   return request({
-    url: '/TplatformPrice/delete',
+    url: '/TdkOrder/delete',
     method: 'get',
     params: query
   })
 }
 
-export function getPrice(query) {
+export function getCourseInfo(data) {
   return request({
-    url: '/TplatformPrice/getPrice',
-    method: 'get',
-    params: query
+    url: '/TdkOrder/getCourseInfo',
+    method: 'post',
+    data
   })
 }
-export function getPricebyId(query) {
+
+export function saveOrder(data) {
   return request({
-    url: '/TplatformPrice/getPricebyId',
-    method: 'get',
-    params: query
-  })
-}
-export function queryData(query) {
-  return request({
-    url: '/TplatformPrice/queryData',
-    method: 'get',
-    params: query
+    url: '/TdkOrder/saveOrder',
+    method: 'post',
+    data
   })
 }

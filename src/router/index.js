@@ -207,14 +207,26 @@ export const asyncRoutes = [
   },
 
   {
-    path: '/icon',
+    path: '/dkorder',
     component: Layout,
+    meta: {
+      title: '订单管理',
+      icon: 'lock',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
     children: [
       {
         path: 'index',
-        component: () => import('@/views/icons/index'),
-        name: 'Icons',
+        component: () => import('@/views/dkorder/index'),
+        name: 'Dkorder',
         meta: { title: '订单管理', icon: 'icon', noCache: true }
+      },
+      {
+        path: 'create/:id(\\d+)',
+        component: () => import('@/views/dkorder/create'),
+        name: 'CreateOrder',
+        meta: { title: '编辑订单', noCache: false, activeMenu: '/dkorder/index' },
+        hidden: true
       }
     ]
   },

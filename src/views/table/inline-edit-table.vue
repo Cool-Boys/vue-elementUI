@@ -42,7 +42,7 @@
               size="small"
               icon="el-icon-refresh"
               type="warning"
-              @click="cancelEdit(row)"
+              @click=" (row)"
             >
               cancel
             </el-button>
