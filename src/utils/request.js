@@ -47,6 +47,7 @@ service.interceptors.response.use(
    */
   response => {
     const resData = decodeURIComponent(response.data)
+
     const res = JSON.parse(resData)
     // if the custom code is not 20000, it is judged as an error.
     if (res.errcode === -1) {

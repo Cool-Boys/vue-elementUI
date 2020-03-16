@@ -8,7 +8,24 @@
       <github-corner style="position: absolute; top: 0px; border: 0; right: 0;" />
       <div class="info-container">
         <span class="display_name">{{ name }}</span>
-        <span style="font-size:20px;padding-top:20px;display:inline-block;">Editor's Dashboard</span>
+        <span style="font-size:20px;padding-top:20px;display:inline-block;">
+          <count-down
+            :current-time="1481450110"
+            :start-time="1481450110"
+            :end-time="1481450115"
+            :tip-text="'距离开始文字1'"
+            :tip-text-end="'距离结束文字1'"
+            :end-text="'结束自定义文字2'"
+            :day-txt="'天'"
+            :hour-txt="'小时'"
+            :minutes-txt="'分钟'"
+            :seconds-txt="'秒'"
+            @start_callback="countDownS_cb(1)"
+            @end_callback="countDownE_cb(1)"
+          />
+
+        </span>
+
       </div>
     </div>
     <div>
@@ -21,10 +38,10 @@
 import { mapGetters } from 'vuex'
 import PanThumb from '@/components/PanThumb'
 import GithubCorner from '@/components/GithubCorner'
-
+import CountDown from 'vue2-countdown'
 export default {
   name: 'DashboardEditor',
-  components: { PanThumb, GithubCorner },
+  components: { PanThumb, GithubCorner, CountDown },
   data() {
     return {
       emptyGif: 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3'
@@ -36,6 +53,14 @@ export default {
       'avatar',
       'roles'
     ])
+  },
+  methods: {
+    countDownS_cb: function(x) {
+      console.log(x)
+    },
+    countDownE_cb: function(x) {
+      console.log(x)
+    }
   }
 }
 </script>

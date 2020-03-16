@@ -52,6 +52,13 @@ export function getPricebyId(query) {
     params: query
   })
 }
+export function getPriceRetail(query) {
+  return request({
+    url: '/TplatformPrice/getPriceRetail',
+    method: 'get',
+    params: query
+  })
+}
 export function queryData(query) {
   return request({
     url: '/TplatformPrice/queryData',

@@ -21,7 +21,7 @@
           {{ scope.row.info }}
         </template>
       </el-table-column>
-      <el-table-column :show-overflow-tooltip="true" label="学期" width="80" align="center">
+      <el-table-column :show-overflow-tooltip="true" label="班级" width="80" align="center">
         <template slot-scope="scope">
           {{ scope.row.xqname }}
         </template>
@@ -52,7 +52,7 @@
 </template>
 
 <script>
-const selectOptions = ['视频', '作业', '考试', '秒刷']
+const selectOptions = ['视频', '考试', '秒刷']
 import waves from '@/directive/waves' // waves directive
 export default {
   directives: { waves },
@@ -103,8 +103,8 @@ export default {
           checkedCount--
         }
       })
-      row.checkAll = checkedCount === 3
-      row.isIndeterminate = checkedCount > 0 && checkedCount < 3
+      row.checkAll = checkedCount === 2
+      row.isIndeterminate = checkedCount > 0 && checkedCount < 2
     },
     handleCheckAllChange(row, $index) {
       let checkedCount = row.selOpt.length
@@ -113,20 +113,20 @@ export default {
           checkedCount--
         }
       })
-      if (checkedCount === 3) {
+      if (checkedCount === 2) {
         row.selOpt = []
         row.isIndeterminate = true
         row.checkAll = false
       }
       if (checkedCount === 0) {
-        row.selOpt = ['视频', '作业', '考试']
+        row.selOpt = ['视频', '考试']
         row.isIndeterminate = false
         row.checkAll = true
       }
     },
     handleSelect() {
       this.dataList.forEach(element => {
-        element.selOpt = ['视频', '作业', '考试']
+        element.selOpt = ['视频', '考试']
         element.isIndeterminate = false
         element.checkAll = true
       })

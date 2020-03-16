@@ -5,62 +5,134 @@
       <div class="title-container">
         <h3 class="title">92看课</h3>
       </div>
+      <!-- type="border-card" -->
+      <el-tabs v-model="loginForm.type" :stretch="true" @tab-click="handleClick">
+        <el-tab-pane label="会员登录" name="1">
+          <el-form-item prop="username">
+            <span class="svg-container">
+              <svg-icon icon-class="user" />
+            </span>
+            <el-input
+              ref="username"
+              v-model="loginForm.username"
+              placeholder="用户名"
+              name="username"
+              type="text"
+              tabindex="1"
+              autocomplete="on"
+            />
+          </el-form-item>
 
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="用户名"
-          name="username"
-          type="text"
-          tabindex="1"
-          autocomplete="on"
-        />
-      </el-form-item>
+          <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
+            <el-form-item prop="password">
+              <span class="svg-container">
+                <svg-icon icon-class="password" />
+              </span>
+              <el-input
+                :key="passwordType"
+                ref="password"
+                v-model="loginForm.password"
+                :type="passwordType"
+                placeholder="密码"
+                name="password"
+                tabindex="2"
+                autocomplete="on"
+                @keyup.native="checkCapslock"
+                @blur="capsTooltip = false"
+                @keyup.enter.native="handleLogin"
+              />
+              <span class="show-pwd" @click="showPwd">
+                <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+              </span>
+            </el-form-item>
+          </el-tooltip>
 
-      <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
-        <el-form-item prop="password">
-          <span class="svg-container">
-            <svg-icon icon-class="password" />
-          </span>
-          <el-input
-            :key="passwordType"
-            ref="password"
-            v-model="loginForm.password"
-            :type="passwordType"
-            placeholder="密码"
-            name="password"
-            tabindex="2"
-            autocomplete="on"
-            @keyup.native="checkCapslock"
-            @blur="capsTooltip = false"
-            @keyup.enter.native="handleLogin"
-          />
-          <span class="show-pwd" @click="showPwd">
-            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-          </span>
-        </el-form-item>
-      </el-tooltip>
+          <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
+          <div style="position:relative">
+            <div class="tips">
+              <span>用户名 : admin</span>
+              <span>密  码 : any</span>
+            </div>
+            <div class="tips">
+              <span style="margin-right:18px;">用户名 : editor</span>
+              <span>密  码 : any</span>
+            </div>
 
-      <div style="position:relative">
-        <div class="tips">
-          <span>用户名 : admin</span>
-          <span>密  码 : any</span>
-        </div>
-        <div class="tips">
-          <span style="margin-right:18px;">用户名 : editor</span>
-          <span>密  码 : any</span>
-        </div>
+            <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
+              第三方登录
+            </el-button>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="学生登录" name="2">
+          <el-form-item>
+            <el-select v-model="loginForm.platFormId" placeholder="请选择平台" style="width:100%">
+              <el-option v-for="item in platFormOptions" :key="item.value" :label="item.label" :value="item.value">
+                <span class="svg-container">
+                  <svg-icon icon-class="shopping" />
+                </span>
+                {{ item.label }}
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item v-if="loginForm.platFormId==1" prop="school">
+            <span class="svg-container">
+              <svg-icon icon-class="user" />
+            </span>
 
-        <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-          第三方登录
-        </el-button>
-      </div>
+            <el-input
+              ref="school"
+              v-model="loginForm.school"
+              placeholder="学校信息"
+              name="school"
+              type="text"
+              tabindex="1"
+              autocomplete="on"
+            />
+          </el-form-item>
+          <el-form-item prop="username">
+            <span class="svg-container">
+              <svg-icon icon-class="user" />
+            </span>
+            <el-input
+              ref="username"
+              v-model="loginForm.username"
+              placeholder="用户名"
+              name="username"
+              type="text"
+              tabindex="1"
+              autocomplete="on"
+            />
+          </el-form-item>
+
+          <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
+            <el-form-item prop="password">
+              <span class="svg-container">
+                <svg-icon icon-class="password" />
+              </span>
+              <el-input
+                :key="passwordType"
+                ref="password"
+                v-model="loginForm.password"
+                :type="passwordType"
+                placeholder="密码"
+                name="password"
+                tabindex="2"
+                autocomplete="on"
+                @keyup.native="checkCapslock"
+                @blur="capsTooltip = false"
+                @keyup.enter.native="handleLogin"
+              />
+              <span class="show-pwd" @click="showPwd">
+                <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+              </span>
+            </el-form-item>
+          </el-tooltip>
+
+          <el-button :loading="loading" type="success" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin2">登录</el-button>
+        </el-tab-pane>
+      </el-tabs>
+
     </el-form>
 
     <el-dialog title="第三方登录" :visible.sync="showDialog">
@@ -93,15 +165,23 @@ export default {
     }
     return {
       loginForm: {
+        type: '1',
+        platFormId: '',
+        school: '',
         username: 'admin',
         password: 'admin'
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur' }],
+        platFormId: [
+          { required: true, message: '请选择平台', trigger: 'change' }
+        ],
+        school: [{ required: true, trigger: 'blur', message: '学校必填' }],
+        username: [{ required: true, trigger: 'blur', message: '用户名必填' }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       passwordType: 'password',
       capsTooltip: false,
+      platFormOptions: [{ value: '1', label: '超星\\学习通' }, { value: '2', label: '智慧树\\知到' }],
       loading: false,
       showDialog: false,
       redirect: undefined,
@@ -138,6 +218,16 @@ export default {
       const { key } = e
       this.capsTooltip = key && key.length === 1 && (key >= 'A' && key <= 'Z')
     },
+    handleClick(tab, event) {
+      console.log(tab)
+      this.loginForm = {
+        type: tab.name,
+        platFormId: '',
+        school: '',
+        username: '',
+        password: ''
+      }
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -149,6 +239,24 @@ export default {
       })
     },
     handleLogin() {
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          this.loading = true
+          this.$store.dispatch('user/login', this.loginForm)
+            .then(() => {
+              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+              this.loading = false
+            })
+            .catch(() => {
+              this.loading = false
+            })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    },
+    handleLogin2() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
@@ -205,13 +313,17 @@ $light_gray:#fff;
 $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
-  .login-container .el-input input {
+  .login-container .el-input  input {
     color: $cursor;
   }
 }
 
 /* reset element-ui css */
+
 .login-container {
+  .el-tabs__item{
+    color:aqua
+  }
   .el-input {
     display: inline-block;
     height: 47px;

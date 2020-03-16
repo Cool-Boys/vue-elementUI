@@ -6,44 +6,24 @@
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.8)"
   >
-    <el-tag effect="dark" type="info"> 平台价格：视频单价:{{ sysPrice.spprice|rounding }},作业单价:{{ sysPrice.zyprice|rounding }},考试单价:{{ sysPrice.ksprice|rounding }},秒刷单价:{{ sysPrice.msprice|rounding }},专属IP:{{ sysPrice.ipprice|rounding }}</el-tag>
-    <el-row :gutter="20" style="margin-top:5px;">
-      <el-col :span="8">
-        <el-card class="box-card">
-          <div slot="header" class="clearfix">
-            <span>填写账号信息</span>
-            <el-button round style="float: right;" @click="handleUsers">验证账号并获取课程信息</el-button>
-          </div>
-          <div class="component-item">
-            <el-input
-              v-model="userInfos"
-              type="textarea"
-              :autosize="{ minRows: 10, maxRows:10}"
-              placeholder="请输入内容"
-            />
-          </div>
-
-          <div v-if="platformId==1">
-            <el-tag style="margin:2px;" type="danger">超星注意：下单格式为学校+空格+账号+空格+密码</el-tag><el-tag style="margin:2px; " type="danger">批量下单目前开放个数为10个账号；</el-tag></div>
-          <div v-else-if="platformId==2">
-            <el-tag v-if="platformId==2" style="margin:2px;" type="danger">智慧树注意：下单格式为账号+空格+密码</el-tag><el-tag style="margin:2px; " type="danger">批量下单目前开放个数为10个账号；</el-tag>
-          </div>
-          <div v-else>
-            <el-tag v-if="platformId!=2&&platformId==2" style="margin:2px;" type="danger">注意：下单格式为账号+空格+密码</el-tag><el-tag style="margin:2px; " type="danger">批量下单目前开放个数为10个账号；</el-tag>
-          </div>
-        </el-card>
-      </el-col>
-      <el-col :span="16">
+    <el-tag effect="dark" type="info"> 平台价格：视频单价:{{ sysPrice.spprice|rounding }},考试单价:{{ sysPrice.ksprice|rounding }},秒刷单价:{{ sysPrice.msprice|rounding }},专属IP:{{ sysPrice.ipprice|rounding }}</el-tag>
+    <el-row :gutter="8" style="margin-top:5px;">
+      <el-col :span="10">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>看课设置</span>
           </div>
-          <div class="component-item">
+          <div class="component-item" style="margin-top: 14px;margin-bottom: 14px;">
             <el-checkbox v-model="ipChecked">专享IP</el-checkbox>
+
+            <!-- <el-button type="primary" @click="openUrl">确 定</el-button> -->
+
           </div>
         </el-card>
+      </el-col>
 
-        <el-card class="box-card" style="margin-top:15px">
+      <el-col :span="10">
+        <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span>有什么要嘱咐的</span>
           </div>
@@ -114,11 +94,12 @@
         :gutter="20"
         style="margin-top:5px;"
       >
-        <el-tag effect="dark" type="info">{{ sysPrice.platformIdName }}平台价格：视频单价:{{ sysPrice.spprice }},作业单价:{{ sysPrice.zyprice }},考试单价:{{ sysPrice.ksprice }},秒刷单价:{{ sysPrice.msprice }},专属IP:{{ sysPrice.ipprice|rounding }}</el-tag>
+        <el-tag effect="dark" type="info">{{ sysPrice.platformIdName }}平台价格：视频单价:{{ sysPrice.spprice }},考试单价:{{ sysPrice.ksprice }},秒刷单价:{{ sysPrice.msprice }},专属IP:{{ sysPrice.ipprice|rounding }}</el-tag>
       </el-row>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">在看看</el-button>
         <el-button type="primary" @click="handleSaveOrder">确 定</el-button>
+
       </span>
     </el-dialog>
 
@@ -126,11 +107,12 @@
 </template>
 
 <script>
-import { getPricebyId } from '@/api/platformprice'
-import { getCourseInfo, saveOrder } from '@/api/dkOrder'
+import { getPriceRetail } from '@/api/platformprice'
+import { getCourseInfoByUserId, saveOrder } from '@/api/dkOrder'
 import CourseTable from './components/CourseTable'
 import store from '@/store'
 import { Message } from 'element-ui'
+
 export default {
   name: 'CreateOrder',
   components: {
@@ -147,7 +129,7 @@ export default {
       return statusMap[status]
     },
     rounding(value) {
-      return value === '' ? '-' : '￥' + parseFloat(value).toFixed(2)
+      return value === '' ? '-' : '' + parseFloat(value).toFixed(2)
     }
   },
   data() {
@@ -155,33 +137,41 @@ export default {
       loading: false,
       sysPrice: null,
       id: null,
-      platformId: null,
       ipChecked: false,
+      userid: store.getters.userId,
       orderMemo: '',
       resDataList: null,
       checkDataList: [],
       order: {},
       orderDetail: [],
       amount: 0,
+      zfData: {
+        id: 438405,
+        type: 1,
+        price: this.amount,
+        pay_id: this.userid,
+        sign: 'ZRte77jYwGG03DXSzq2ZDaBPDBYeb0Bh'
+      },
+      zfurl: '',
+      wxzfurl: '',
       userInfos: null,
       dialogVisible: false
     }
   },
   created() {
-    const id = this.$route.params && this.$route.params.id
-    this.platformId = this.$route.params && this.$route.params.platformId
-    this.id = id
-    this.fetchData(id)
-
     // Why need to make a copy of this.$route here?
     // Because if you enter this page and quickly switch tag, may be in the execution of the setTagsViewTitle function, this.$route is no longer pointing to the current page
     // https://github.com/PanJiaChen/vue-element-admin/issues/1221
     this.tempRoute = Object.assign({}, this.$route)
     // set tagsview title
+    this.handleUsers()
+  },
+  mounted() {
+    this.fetchData()
   },
   methods: {
-    fetchData(id) {
-      getPricebyId({ id: id }).then(
+    fetchData() {
+      getPriceRetail({ userId: store.getters.userId }).then(
         response => {
           this.sysPrice = response.data
           this.setTagsViewTitle()
@@ -202,11 +192,8 @@ export default {
     },
     handleUsers() {
       this.loading = true
-      console.log(this.userInfos.split('\n').length)
-      if (this.userInfos.split('\n').length > 10) {
-        this.$message.error('不要超过10个账号好吗？')
-      } else {
-        getCourseInfo({ accounts: this.userInfos, platformId: this.platformId }).then(response => {
+      if (!this.resDataList) {
+        getCourseInfoByUserId({ userId: store.getters.userId }).then(response => {
           for (let index = 0; index < response.data.length; index++) {
             const element = response.data[index]
             element['selOpt'] = []
@@ -220,7 +207,6 @@ export default {
       }
     },
     handleCourseInfo() {
-      console.log(this.resDataList)
       this.checkDataList = []
       this.amount = 0
       this.resDataList.forEach(element => {
@@ -229,8 +215,6 @@ export default {
           element.selOpt.forEach(item => {
             if (item === '视频') {
               this.amount += this.sysPrice.spprice
-            } else if (item === '作业') {
-              this.amount += this.sysPrice.zyprice
             } else if (item === '考试') {
               this.amount += this.sysPrice.ksprice
             } else if (item === '秒刷') {
@@ -244,7 +228,22 @@ export default {
       } else {
         this.amount += this.ipChecked ? this.sysPrice.ipprice : 0
         this.dialogVisible = true
+
+        // zfOrder(this.zfData).then(response => {
+        //   console.log(response.data)
+        // })
+        // axios.get('http://api2.xiuxiu888.com/creat_order', this.zfData).then(function(res) {
+        //   console.log(res.data)
+        // }).catch(function(error) {
+        //   console.log(error)
+        // })
       }
+    },
+    callback(data) {
+      console.log(data)
+    },
+    openUrl() {
+      this.$router.push({ name: 'orderpayPage', params: { orderId: 10 }})
     },
     handleSaveOrder() {
       this.order = {}
@@ -282,8 +281,9 @@ export default {
       this.loading = true
       saveOrder({ order: JSON.stringify(this.order), orderDetail: JSON.stringify(this.orderDetail) }).then(response => {
         this.loading = false
-        if (response.data === 1) {
+        if (response.data > 0) {
           this.dialogVisible = false
+          this.$router.push({ name: 'orderpayPage', params: { orderId: response.data }})
         }
       }).catch(function(error) {
         Message({

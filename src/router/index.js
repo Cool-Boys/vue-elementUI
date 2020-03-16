@@ -82,7 +82,15 @@ export const constantRoutes = [
         meta: { title: '92看课', icon: 'dashboard', affix: true }
       }
     ]
-  },
+  }
+
+]
+
+/**
+ * asyncRoutes
+ * the routes that need to be dynamically loaded based on user roles
+ */
+export const asyncRoutes = [
   {
     path: '/documentation',
     component: Layout,
@@ -92,32 +100,36 @@ export const constantRoutes = [
     meta: {
       title: '系统管理',
       icon: 'documentation',
-      roles: ['admin', 'editor'] // you can set roles in root nav
+      roles: ['1', '2'] // you can set roles in root nav
     },
     children: [
       {
         path: 'notice',
         component: () => import('@/views/notice/index'),
         name: 'Notice',
-        meta: { title: '公告管理', icon: 'documentation' }
+        meta: { title: '公告管理', icon: 'documentation',
+          roles: ['1'] }
       },
       {
         path: 'role',
         component: () => import('@/views/role/index'),
         name: 'Role',
-        meta: { title: '角色管理', icon: 'documentation' }
+        meta: { title: '角色管理', icon: 'documentation',
+          roles: ['1'] }
       },
       {
         path: 'dlgroup',
         component: () => import('@/views/dlgroup/index'),
         name: 'Dlgroup',
-        meta: { title: '分组管理', icon: 'documentation' }
+        meta: { title: '分组管理', icon: 'documentation',
+          roles: ['1', '2'] }
       },
       {
         path: 'platform',
         component: () => import('@/views/platform/index'),
         name: 'Platform',
-        meta: { title: '平台管理', icon: 'documentation' }
+        meta: { title: '平台管理', icon: 'documentation',
+          roles: ['1'] }
       }
     ]
   },
@@ -126,19 +138,21 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/guide/index',
     alwaysShow: true,
-    meta: { title: '财务管理', icon: 'guide', noCache: true },
+    meta: { title: '财务管理', icon: 'guide', noCache: true, roles: ['1', '2', '3'] },
     children: [
       {
         path: 'index',
         component: () => import('@/views/rechrecord/index'),
         name: 'Rechrecord',
-        meta: { title: '充值管理', noCache: true }
+        meta: { title: '充值管理', noCache: true,
+          roles: ['1'] }
       },
       {
         path: 'transferindex',
         component: () => import('@/views/rechrecord/transferindex'),
         name: 'Transferindex',
-        meta: { title: '转账管理', noCache: true }
+        meta: { title: '转账管理', noCache: true,
+          roles: ['1', '2', '3'] }
       }
     ]
   },
@@ -153,17 +167,10 @@ export const constantRoutes = [
         // component: () => import('@/views/profile/index'),
         component: () => import('@/views/users/index'),
         name: 'Agent',
-        meta: { title: '代理管理', icon: 'user', noCache: true }
+        meta: { title: '代理管理', icon: 'user', noCache: true, roles: ['1', '2'] }
       }
     ]
-  }
-]
-
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
- */
-export const asyncRoutes = [
+  },
   {
     path: '/permission',
     component: Layout,
@@ -173,7 +180,7 @@ export const asyncRoutes = [
     meta: {
       title: '平台管理',
       icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
+      roles: ['1'] // you can set roles in root nav
     },
     children: [
       {
@@ -182,27 +189,10 @@ export const asyncRoutes = [
         name: 'Platformprice',
         meta: {
           title: '价格管理',
-          roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },
-      {
-        path: 'directive',
-        component: () => import('@/views/permission/directive'),
-        name: 'DirectivePermission',
-        meta: {
-          title: 'Directive Permission'
-          // if do not set roles, means: this page does not require permission
-        }
-      },
-      {
-        path: 'role',
-        component: () => import('@/views/permission/role'),
-        name: 'RolePermission',
-        meta: {
-          title: 'Role Permission',
-          roles: ['admin']
+          roles: ['1'] // or you can only set roles in sub nav
         }
       }
+
     ]
   },
 
@@ -211,22 +201,51 @@ export const asyncRoutes = [
     component: Layout,
     meta: {
       title: '订单管理',
-      icon: 'lock',
-      roles: ['admin', 'editor'] // you can set roles in root nav
+      icon: 'lock' // you can set roles in root nav
     },
     children: [
       {
         path: 'index',
         component: () => import('@/views/dkorder/index'),
         name: 'Dkorder',
-        meta: { title: '订单管理', icon: 'icon', noCache: true }
+        meta: { title: '订单管理', icon: 'icon', noCache: true,
+          roles: ['1', '2', '3', '4'] }
       },
       {
-        path: 'create/:id(\\d+)',
+        path: 'create/:id(\\d+)/:platformId(\\d+)',
         component: () => import('@/views/dkorder/create'),
         name: 'CreateOrder',
-        meta: { title: '编辑订单', noCache: false, activeMenu: '/dkorder/index' },
+        meta: { title: '编辑订单', noCache: false, activeMenu: '/dkorder/index',
+          roles: ['1', '2', '3', '4'] },
         hidden: true
+      },
+      {
+        path: 'createRetail',
+        component: () => import('@/views/dkorder/createRetail'),
+        name: 'DkorderRetail',
+        meta: { title: '零售下单', icon: 'icon', noCache: false, roles: ['5'] }
+        // you can set roles in root nav
+      },
+      {
+        path: 'payPage/:orderId(\\d+)',
+        component: () => import('@/views/dkorder/payPage'),
+        name: 'orderpayPage',
+        meta: { title: '订单支付', noCache: false, activeMenu: '/dkorder/createRetail',
+          roles: ['5'] },
+        hidden: true
+      },
+      {
+        path: 'wzfOrder',
+        component: () => import('@/views/dkorder/wzfOrder'),
+        name: 'wOrderList',
+        meta: { title: '未支付订单', icon: 'icon',
+          roles: ['5'] }
+      },
+      {
+        path: 'list',
+        component: () => import('@/views/dkorder/list'),
+        name: 'DkorderList',
+        meta: { title: '订单查询', icon: 'icon' }
       }
     ]
   },

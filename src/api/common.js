@@ -30,3 +30,19 @@ export function selectUsers(query) {
     params: query
   })
 }
+
+export function getPayData(data) {
+  return request({
+    url: '/common/getPayData',
+    method: 'post',
+    data
+  })
+}
+
+export function getPayDataStatus(data) {
+  return request({
+    url: '/common/getPayDataStatus',
+    method: 'post',
+    data
+  })
+}

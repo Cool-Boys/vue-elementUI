@@ -24,7 +24,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="200">
         <template slot-scope="scope">
-          <router-link v-if="scope.row.status==1" :to="'/dkorder/create/'+scope.row.id">
+          <router-link v-if="scope.row.status==1" :to="'/dkorder/create/'+scope.row.id+'/'+scope.row.platformId">
             <el-button type="primary" size="small" icon="el-icon-edit">
               立即下单
             </el-button>

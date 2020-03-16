@@ -46,6 +46,13 @@ export function getCourseInfo(data) {
   })
 }
 
+export function getCourseInfoByUserId(data) {
+  return request({
+    url: '/TdkOrder/getCourseInfoByUserId',
+    method: 'post',
+    data
+  })
+}
 export function saveOrder(data) {
   return request({
     url: '/TdkOrder/saveOrder',
@@ -53,3 +60,12 @@ export function saveOrder(data) {
     data
   })
 }
+
+export function zfOrder(query) {
+  return request({
+    url: 'http://api2.xiuxiu888.com/creat_order',
+    method: 'get',
+    params: query
+  })
+}
+
