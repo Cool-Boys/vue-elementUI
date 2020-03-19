@@ -82,6 +82,20 @@ export const constantRoutes = [
         meta: { title: '92看课', icon: 'dashboard', affix: true }
       }
     ]
+  },
+  {
+    path: '/profile',
+    component: Layout,
+    redirect: '/profile/index',
+    hidden: true,
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/profile/index'),
+        name: 'Profile',
+        meta: { title: '我的', icon: 'user', noCache: true }
+      }
+    ]
   }
 
 ]
@@ -138,7 +152,7 @@ export const asyncRoutes = [
     component: Layout,
     redirect: '/guide/index',
     alwaysShow: true,
-    meta: { title: '财务管理', icon: 'guide', noCache: true, roles: ['1', '2', '3'] },
+    meta: { title: '财务管理', icon: 'guide', noCache: true, roles: ['1', '2', '3', '4'] },
     children: [
       {
         path: 'index',
@@ -153,6 +167,18 @@ export const asyncRoutes = [
         name: 'Transferindex',
         meta: { title: '转账管理', noCache: true,
           roles: ['1', '2', '3'] }
+      },
+      {
+        path: 'rechIndex',
+        component: () => import('@/views/rechrecord/rechIndex'),
+        name: 'rechIndex',
+        meta: { title: '在线充值', noCache: true }
+      },
+      {
+        path: 'rechList',
+        component: () => import('@/views/rechrecord/list'),
+        name: 'rechList',
+        meta: { title: '在线充值记录', noCache: true }
       }
     ]
   },
@@ -249,16 +275,16 @@ export const asyncRoutes = [
       }
     ]
   },
-  {
-    path: 'external-link',
-    component: Layout,
-    children: [
-      {
-        path: 'https://github.com/PanJiaChen/vue-element-admin',
-        meta: { title: 'External Link', icon: 'link' }
-      }
-    ]
-  },
+  // {
+  //   path: 'external-link',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'https://github.com/PanJiaChen/vue-element-admin',
+  //       meta: { title: 'External Link', icon: 'link' }
+  //     }
+  //   ]
+  // },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

@@ -46,3 +46,19 @@ export function getPayDataStatus(data) {
     data
   })
 }
+
+export function getPayAmountData(data) {
+  return request({
+    url: '/common/getPayAmountData',
+    method: 'post',
+    data
+  })
+}
+
+export function getPayAmountDataStatus(data) {
+  return request({
+    url: '/common/getPayAmountDataStatus',
+    method: 'post',
+    data
+  })
+}

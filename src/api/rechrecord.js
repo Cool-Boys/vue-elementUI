@@ -46,3 +46,10 @@ export function saveTraf(data) {
   })
 }
 
+export function getDataList(query) {
+  return request({
+    url: '/TrechRecord/getDataList',
+    method: 'get',
+    params: query
+  })
+}
