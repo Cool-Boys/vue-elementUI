@@ -21,6 +21,7 @@
       fit
       highlight-current-row
       style="width: 100%;"
+      :height="scrollerHeight"
       @sort-change="sortChange"
     >
       <el-table-column v-if="showReviewer" label="ID" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
@@ -70,12 +71,16 @@
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagesize" @pagination="getList" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" @close="dialogClose">
       <el-form ref="dataForm" v-loading="formLoading" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 300px; margin-left:50px;">
-        <el-form-item label="转账用户" prop="touserId">
-          <el-select v-model="temp.touserId" filterable class="filter-item" placeholder="请选择转账用户">
+        <el-form-item label="转账用户">
+          <!-- <el-select v-model="temp.touserId" filterable class="filter-item" placeholder="请选择转账用户">
             <el-option v-for="item in selectOptions" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
+          </el-select> -->
+          <el-input v-model="touser" placeholder="请填写转账用户" />
+          <el-button type="primary" style="margin-top:10px" @click="checkMyUser()">
+            验证用户
+          </el-button>
         </el-form-item>
         <el-form-item label="转账金额" prop="amount">
           <el-input v-model="temp.amount" placeholder="请填写转账金额" />
@@ -98,7 +103,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { findByWhere, saveTraf, update, deleteData } from '@/api/rechrecord'
-import { getInfo } from '@/api/user'
+import { getInfo, checkUser } from '@/api/user'
 import { selectUsers } from '@/api/common'
 import waves from '@/directive/waves' // waves directive
 import { parseTime } from '@/utils'
@@ -178,10 +183,12 @@ export default {
         flag: 2,
         userId: store.getters.userId
       },
+      scrollerHeight: '400px',
       selectOptions: null,
       showReviewer: false,
       am: 0,
       ye: 0,
+      touser: '',
       temp: {
         id: undefined,
         userId: store.getters.userId,
@@ -205,6 +212,9 @@ export default {
         ],
         touserId: [
           { required: true, message: '请选择转账用户', trigger: 'change' }
+        ],
+        touser: [
+          { required: true, message: '请填写转账用户', trigger: 'blur' }
         ]
       },
       downloadLoading: false
@@ -221,8 +231,16 @@ export default {
   created() {
     this.getList()
     this.initData()
+    this.hh()
   },
   methods: {
+    hh() {
+      this.scrollerHeight = window.innerHeight - 270 + 'px'
+    },
+    dialogClose() {
+      this.resetTemp()
+      this.touser = ''
+    },
     getList() {
       this.listLoading = true
       findByWhere(this.listQuery).then(response => {
@@ -246,6 +264,23 @@ export default {
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
+    },
+    checkMyUser() {
+      if (!this.touser) {
+        this.$message({
+          message: '转账用户必填！',
+          type: 'error'
+        })
+        return
+      }
+
+      checkUser({ userName: this.touser }).then(response => {
+        this.temp.touserId = response.data.usersId
+        this.$message({
+          message: '验证成功！',
+          type: 'success'
+        })
+      })
     },
     handleModifyStatus(row, status) {
       const tempData = {}
@@ -296,6 +331,20 @@ export default {
     },
     createData() {
       console.log(this.temp)
+      if (!this.touser) {
+        this.$message({
+          message: '转账用户必填！',
+          type: 'error'
+        })
+        return
+      }
+      if (!this.temp.touserId) {
+        this.$message({
+          message: '转账用户未验证！',
+          type: 'error'
+        })
+        return
+      }
       this.$refs['dataForm'].validate((valid) => {
         debugger
         if (valid) {

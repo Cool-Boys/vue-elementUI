@@ -1,5 +1,5 @@
 <template>
-  <el-row :gutter="40" class="panel-group">
+  <el-row v-loading="listLoading" :gutter="40" class="panel-group">
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
         <div class="card-panel-icon-wrapper icon-people">
@@ -9,7 +9,7 @@
           <div class="card-panel-text">
             用户数
           </div>
-          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="data.userCount" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -22,7 +22,7 @@
           <div class="card-panel-text">
             今日收入
           </div>
-          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="data.dayAmount" :duration="3000" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -35,7 +35,7 @@
           <div class="card-panel-text">
             充值金额
           </div>
-          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="data.dayrechAmount" :duration="3200" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -48,7 +48,7 @@
           <div class="card-panel-text">
             零售订单
           </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="data.rechOrderCount" :duration="3600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -57,10 +57,30 @@
 
 <script>
 import CountTo from 'vue-count-to'
+import { getTotal } from '@/api/common'
 
 export default {
   components: {
     CountTo
+  },
+  data() {
+    return {
+      listLoading: true,
+      data: {
+        userCount: 0,
+        dayAmount: 0,
+        dayrechAmount: 0,
+        rechOrderCount: 0
+      }
+    }
+  },
+  created() {
+    getTotal().then(response => {
+      this.data = response.data
+      setTimeout(() => {
+        this.listLoading = false
+      }, 1 * 500)
+    })
   },
   methods: {
     handleSetLineChartData(type) {

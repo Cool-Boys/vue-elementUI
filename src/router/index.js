@@ -79,7 +79,7 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         name: 'Dashboard',
-        meta: { title: '92看课', icon: 'dashboard', affix: true }
+        meta: { title: '92看课', icon: 'dashboard' }
       }
     ]
   },
@@ -93,7 +93,7 @@ export const constantRoutes = [
         path: 'index',
         component: () => import('@/views/profile/index'),
         name: 'Profile',
-        meta: { title: '我的', icon: 'user', noCache: true }
+        meta: { title: '我的', icon: 'user', affix: true }
       }
     ]
   }
@@ -226,7 +226,7 @@ export const asyncRoutes = [
     path: '/dkorder',
     component: Layout,
     meta: {
-      title: '订单管理',
+      title: '代看下单',
       icon: 'lock' // you can set roles in root nav
     },
     children: [
@@ -234,7 +234,7 @@ export const asyncRoutes = [
         path: 'index',
         component: () => import('@/views/dkorder/index'),
         name: 'Dkorder',
-        meta: { title: '订单管理', icon: 'icon', noCache: true,
+        meta: { title: '平台下单', icon: 'icon', noCache: true,
           roles: ['1', '2', '3', '4'] }
       },
       {
@@ -249,7 +249,7 @@ export const asyncRoutes = [
         path: 'createRetail',
         component: () => import('@/views/dkorder/createRetail'),
         name: 'DkorderRetail',
-        meta: { title: '零售下单', icon: 'icon', noCache: false, roles: ['5'] }
+        meta: { title: '选择课程', icon: 'icon', noCache: false, roles: ['5'] }
         // you can set roles in root nav
       },
       {

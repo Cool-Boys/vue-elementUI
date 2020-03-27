@@ -9,6 +9,7 @@ const state = {
   name: '',
   avatar: '',
   introduction: '',
+  account: {},
   roles: []
 }
 
@@ -33,6 +34,9 @@ const mutations = {
   },
   SET_USERID: (state, userId) => {
     state.userId = userId
+  },
+  SET_ACCOUNT: (state, account) => {
+    state.account = account
   }
 }
 
@@ -72,6 +76,7 @@ const actions = {
         // if (!roles || roles.length <= 0) {
         //   reject('getInfo: roles must be a non-null array!')
         // }
+        commit('SET_ACCOUNT', resData)
         commit('SET_USERID', resData.usersId)
         commit('SET_ROLEID', resData.roleId)
         commit('SET_ROLES', roles)

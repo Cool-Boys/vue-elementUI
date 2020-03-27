@@ -126,14 +126,16 @@ export default {
     flagFilter1(status) {
       const statusMap = {
         1: '充值',
-        2: '转账'
+        2: '转账',
+        3: '在线充值'
       }
       return statusMap[status]
     },
     flagFilter(status) {
       const statusMap = {
         1: 'success',
-        2: 'danger'
+        2: 'danger',
+        3: 'warning'
       }
       return statusMap[status]
     }

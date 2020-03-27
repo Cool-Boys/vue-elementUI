@@ -20,6 +20,7 @@
       fit
       highlight-current-row
       style="width: 100%;"
+      :height="scrollerHeight"
       @sort-change="sortChange"
     >
       <el-table-column v-if="showReviewer" label="ID" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
@@ -121,6 +122,7 @@ export default {
       tableKey: 0,
       list: null,
       total: 0,
+      scrollerHeight: '400px',
       listLoading: true,
       listQuery: {
         page: 1,
@@ -159,8 +161,12 @@ export default {
   },
   created() {
     this.getList()
+    this.hh()
   },
   methods: {
+    hh() {
+      this.scrollerHeight = window.innerHeight - 270 + 'px'
+    },
     getList() {
       this.listLoading = true
       findByWhere(this.listQuery).then(response => {

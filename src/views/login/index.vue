@@ -51,17 +51,17 @@
 
           <div style="position:relative">
             <div class="tips">
-              <span>用户名 : admin</span>
-              <span>密  码 : any</span>
+              <span />
+              <span />
             </div>
             <div class="tips">
-              <span style="margin-right:18px;">用户名 : editor</span>
-              <span>密  码 : any</span>
+              <span style="margin-right:18px;" />
+              <span />
             </div>
 
-            <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
+            <!-- <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
               第三方登录
-            </el-button>
+            </el-button> -->
           </div>
         </el-tab-pane>
         <el-tab-pane label="学生登录" name="2">

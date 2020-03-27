@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+
     <div class="filter-container">
       <el-input v-model="listQuery.sname" placeholder="用户名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
 
@@ -11,27 +12,28 @@
       </el-button>
 
     </div>
-
-    <el-table
-      :key="tableKey"
-      v-loading="listLoading"
-      :data="list"
-      border
-      fit
-      highlight-current-row
-      style="width: 100%;"
-      @sort-change="sortChange"
-    >
-      <el-table-column
-        type="index"
-        :index="1"
-      />
-      <el-table-column v-if="showReviewer" label="ID" prop="usersId" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
-        <template slot-scope="{row}">
-          <span>{{ row.usersId }}</span>
-        </template>
-      </el-table-column>
-      <!-- <el-table-column label="groupId" prop="groupId" align="center" width="80">
+    <el-scrollbar style="height:10%">
+      <el-table
+        :key="tableKey"
+        v-loading="listLoading"
+        :data="list"
+        border
+        fit
+        highlight-current-row
+        style="width: 100%;"
+        :height="scrollerHeight"
+        @sort-change="sortChange"
+      >
+        <el-table-column
+          type="index"
+          :index="1"
+        />
+        <el-table-column v-if="showReviewer" label="ID" prop="usersId" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
+          <template slot-scope="{row}">
+            <span>{{ row.usersId }}</span>
+          </template>
+        </el-table-column>
+        <!-- <el-table-column label="groupId" prop="groupId" align="center" width="80">
         <template slot-scope="{row}">
           <span>{{ row.groupId }}</span>
         </template>
@@ -41,79 +43,79 @@
           <span>{{ row.roleId }}</span>
         </template>
       </el-table-column> -->
-      <el-table-column label="用户名称" min-width="130px">
-        <template slot-scope="{row}">
-          <span class="link-type" @click="handleUpdate(row)">{{ row.sname }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column v-if="showReviewer" label="密码" width="100">
-        <template slot-scope="{row}">
-          <span>{{ row.password }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="余额" width="100">
-        <template slot-scope="{row}">
-          <span>{{ row.amount|rounding }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="代理级别" width="100">
-        <template slot-scope="{row}">
-          <span>{{ row.roleIdName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="代理分组" width="100">
-        <template slot-scope="{row}">
-          <span>{{ row.groupIdName }}</span>
-        </template>
-      </el-table-column>
+        <el-table-column label="用户名称" min-width="130px">
+          <template slot-scope="{row}">
+            <span class="link-type" @click="handleUpdate(row)">{{ row.sname }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column v-if="showReviewer" label="密码" width="100">
+          <template slot-scope="{row}">
+            <span>{{ row.password }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="余额" width="100">
+          <template slot-scope="{row}">
+            <span>{{ row.amount|rounding }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="代理级别" width="100">
+          <template slot-scope="{row}">
+            <span>{{ row.roleIdName }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="代理分组" width="100">
+          <template slot-scope="{row}">
+            <span>{{ row.groupIdName }}</span>
+          </template>
+        </el-table-column>
 
-      <el-table-column label="QQ号" width="100">
-        <template slot-scope="{row}">
-          <span>{{ row.qq }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="微信号" width="120">
-        <template slot-scope="{row}">
-          <span>{{ row.wx }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="手机号" width="120">
-        <template slot-scope="{row}">
-          <span>{{ row.phonum }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="备注" width="100">
-        <template slot-scope="{row}">
-          <span>{{ row.memo }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="状态" class-name="status-col" width="100">
-        <template slot-scope="{row}">
-          <el-tag :type="row.bdel|statusFilter1| statusFilter">
-            {{ row.bdel|statusFilter1 }}
-          </el-tag>
-        </template>
-      </el-table-column>
+        <el-table-column label="QQ号" width="100">
+          <template slot-scope="{row}">
+            <span>{{ row.qq }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="微信号" width="120">
+          <template slot-scope="{row}">
+            <span>{{ row.wx }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="手机号" width="120">
+          <template slot-scope="{row}">
+            <span>{{ row.phonum }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="备注" width="100">
+          <template slot-scope="{row}">
+            <span>{{ row.memo }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" class-name="status-col" width="100">
+          <template slot-scope="{row}">
+            <el-tag :type="row.bdel|statusFilter1| statusFilter">
+              {{ row.bdel|statusFilter1 }}
+            </el-tag>
+          </template>
+        </el-table-column>
 
-      <el-table-column fixed="right" label="操作" align="center" width="250" class-name="small-padding fixed-width">
-        <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="handleUpdate(row)">
-            编辑
-          </el-button>
-          <el-button v-if="row.bdel!='2'" size="mini" @click="handleModifyStatus(row,'2')">
-            禁用
-          </el-button>
-          <el-button v-if="row.bdel!='1'" size="mini" type="success" @click="handleModifyStatus(row,'1')">
-            使用
-          </el-button>
-          <el-button v-if="row.bdel!='0'" size="mini" type="danger" @click="handleModifyStatus(row,'0')">
-            删除
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagesize" @pagination="getList" />
-
+        <el-table-column fixed="right" label="操作" align="center" width="250" class-name="small-padding fixed-width">
+          <template slot-scope="{row}">
+            <el-button type="primary" size="mini" @click="handleUpdate(row)">
+              编辑
+            </el-button>
+            <el-button v-if="row.bdel!='2'" size="mini" @click="handleModifyStatus(row,'2')">
+              禁用
+            </el-button>
+            <el-button v-if="row.bdel!='1'" size="mini" type="success" @click="handleModifyStatus(row,'1')">
+              使用
+            </el-button>
+            <el-button v-if="row.bdel!='0'" size="mini" type="danger" @click="handleModifyStatus(row,'0')">
+              删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagesize" @pagination="getList" />
+    </el-scrollbar>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :inline="true" :rules="rules" :model="temp" label-position="right" label-width="120px">
         <el-form-item label="用户名称" prop="sname">
@@ -162,7 +164,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+// import { mapGetters } from 'vuex'
 import { findByWhere, insert, update, deleteData } from '@/api/user'
 import { selectRole, selectDlGroup } from '@/api/common'
 import waves from '@/directive/waves' // waves directive
@@ -248,6 +250,7 @@ export default {
         update: '编辑',
         create: '创建'
       },
+      scrollerHeight: '400px',
       dialogPvVisible: false,
       pvData: [],
       rules: {
@@ -259,17 +262,22 @@ export default {
       downloadLoading: false
     }
   },
-  computed: {
+  computed() {
     // eslint-disable-next-line no-undef
-    ...mapGetters([
-      'name'
-    ])
+    // ...mapGetters([
+    //   'name'
+    // ])
+    this.hh()
   },
   created() {
     this.getList()
     this.initData()
   },
+
   methods: {
+    hh() {
+      this.scrollerHeight = window.innerHeight - 270 + 'px'
+    },
     getList() {
       this.listLoading = true
       findByWhere(this.listQuery).then(response => {
@@ -429,7 +437,32 @@ export default {
 </script>
 
 <style scoped>
+
 .el-input--medium .el-input__inner{
 width: 170px;
 }
+
+.el-table--scrollable-y
+  .el-table__body-wrapper::-webkit-scrollbar {
+    width: 4px;
+  }
+   .gutter {
+    width: 4px !important;
+  }
+
+.el-table--scrollable-y
+   .el-table__body-wrapper::-webkit-scrollbar-thumb {
+    background-color: #d8d8d8ff;
+    border-radius: 7px;
+     /* box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); */
+  }
+
+/*定义滚动条的轨道颜色、内阴影及圆角*/
+.el-table--scrollable-y
+   .el-table__body-wrapper::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #fff;
+    border-radius: 3px;
+  }
+
 </style>

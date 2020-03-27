@@ -20,6 +20,7 @@
       fit
       highlight-current-row
       style="width: 100%;"
+      :height="scrollerHeight"
       @sort-change="sortChange"
     >
       <el-table-column v-if="showReviewer" label="ID" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
@@ -31,6 +32,11 @@
       <el-table-column label="平台名称" min-width="150px">
         <template slot-scope="{row}">
           <span class="link-type" @click="handleUpdate(row)">{{ row.sname }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="平台公告" min-width="150px">
+        <template slot-scope="{row}">
+          <span class="link-type">{{ row.memo }}</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" class-name="status-col" width="100">
@@ -60,9 +66,12 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.pagesize" @pagination="getList" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="70px" style="width: 400px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
         <el-form-item label="平台名称" prop="sname">
           <el-input v-model="temp.sname" />
+        </el-form-item>
+        <el-form-item label="平台公告">
+          <el-input v-model="temp.memo" />
         </el-form-item>
         <el-form-item label="状态">
           <el-select v-model="temp.status" class="filter-item" placeholder="请选择">
@@ -116,6 +125,7 @@ export default {
       list: null,
       total: 0,
       listLoading: true,
+      scrollerHeight: '400px',
       listQuery: {
         page: 1,
         pagesize: 20,
@@ -127,6 +137,7 @@ export default {
       temp: {
         id: undefined,
         sname: '',
+        memo: '',
         status: '1'
       },
       dialogFormVisible: false,
@@ -138,7 +149,7 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        content: [{ required: true, message: '内容必填', trigger: 'blur' }]
+        sname: [{ required: true, message: '内容必填', trigger: 'blur' }]
       },
       downloadLoading: false
     }
@@ -151,8 +162,12 @@ export default {
   },
   created() {
     this.getList()
+    this.hh()
   },
   methods: {
+    hh() {
+      this.scrollerHeight = window.innerHeight - 270 + 'px'
+    },
     getList() {
       this.listLoading = true
       findByWhere(this.listQuery).then(response => {

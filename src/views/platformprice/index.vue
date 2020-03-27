@@ -18,6 +18,7 @@
       fit
       highlight-current-row
       style="width: 100%;"
+      :height="scrollerHeight"
       @sort-change="sortChange"
     >
       <el-table-column v-if="showReviewer" label="ID" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
@@ -179,10 +180,10 @@ export default {
       if (!value) {
         return callback(new Error('输入不能为空'))
       }
-      const { spprice } = this.sysPrice.find(val => val.platformId === this.temp.platformId)
-      if (spprice > value) {
-        this.temp.spprice = spprice
-      }
+      // const { spprice } = this.sysPrice.find(val => val.platformId === this.temp.platformId)
+      // if (spprice > value) {
+      //   this.temp.spprice = spprice
+      // }
       setTimeout(() => {
         if (!reg.test(value)) {
           callback(new Error('请输入数字'))
@@ -196,10 +197,10 @@ export default {
       if (!value) {
         return callback(new Error('输入不能为空'))
       }
-      const { zyprice } = this.sysPrice.find(val => val.platformId === this.temp.platformId)
-      if (zyprice > value) {
-        this.temp.zyprice = zyprice
-      }
+      // const { zyprice } = this.sysPrice.find(val => val.platformId === this.temp.platformId)
+      // if (zyprice > value) {
+      //   this.temp.zyprice = zyprice
+      // }
       setTimeout(() => {
         if (!reg.test(value)) {
           callback(new Error('请输入数字'))
@@ -213,10 +214,10 @@ export default {
       if (!value) {
         return callback(new Error('输入不能为空'))
       }
-      const { ksprice } = this.sysPrice.find(val => val.platformId === this.temp.platformId)
-      if (ksprice > value) {
-        this.temp.ksprice = ksprice
-      }
+      // const { ksprice } = this.sysPrice.find(val => val.platformId === this.temp.platformId)
+      // if (ksprice > value) {
+      //   this.temp.ksprice = ksprice
+      // }
       setTimeout(() => {
         if (!reg.test(value)) {
           callback(new Error('请输入数字'))
@@ -230,10 +231,10 @@ export default {
       if (!value) {
         return callback(new Error('输入不能为空'))
       }
-      const { ipprice } = this.sysPrice.find(val => val.platformId === this.temp.platformId)
-      if (ipprice > value) {
-        this.temp.ipprice = ipprice
-      }
+      // const { ipprice } = this.sysPrice.find(val => val.platformId === this.temp.platformId)
+      // if (ipprice > value) {
+      //   this.temp.ipprice = ipprice
+      // }
       setTimeout(() => {
         if (!reg.test(value)) {
           callback(new Error('请输入数字'))
@@ -247,10 +248,10 @@ export default {
       if (!value) {
         return callback(new Error('输入不能为空'))
       }
-      const { msprice } = this.sysPrice.find(val => val.platformId === this.temp.platformId)
-      if (msprice > value) {
-        this.temp.msprice = msprice
-      }
+      // const { msprice } = this.sysPrice.find(val => val.platformId === this.temp.platformId)
+      // if (msprice > value) {
+      //   this.temp.msprice = msprice
+      // }
       setTimeout(() => {
         if (!reg.test(value)) {
           callback(new Error('请输入数字'))
@@ -264,10 +265,10 @@ export default {
       if (!value) {
         return callback(new Error('输入不能为空'))
       }
-      const { xsprice } = this.sysPrice.find(val => val.platformId === this.temp.platformId)
-      if (xsprice > value) {
-        this.temp.xsprice = xsprice
-      }
+      // const { xsprice } = this.sysPrice.find(val => val.platformId === this.temp.platformId)
+      // if (xsprice > value) {
+      //   this.temp.xsprice = xsprice
+      // }
       setTimeout(() => {
         if (!reg.test(value)) {
           callback(new Error('请输入数字'))
@@ -311,6 +312,7 @@ export default {
       selectPlatOptions: null,
       sysPrice: null,
       showReviewer: false,
+      scrollerHeight: '400px',
       temp: {
         id: undefined,
         roleId: '',
@@ -357,8 +359,12 @@ export default {
   created() {
     this.getList()
     this.initData()
+    this.hh()
   },
   methods: {
+    hh() {
+      this.scrollerHeight = window.innerHeight - 270 + 'px'
+    },
     // v-el-drag-dialog onDrag callback function
     handleDrag() {
       this.$refs.select.blur()

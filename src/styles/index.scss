@@ -7,6 +7,7 @@
 
 body {
   height: 100%;
+  overflow: hidden;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -188,4 +189,9 @@ aside {
 
 .multiselect--active {
   z-index: 1000 !important;
+}
+
+.pagination-container {
+  margin-top: 10px;
+  padding-top: 5px !important;
 }

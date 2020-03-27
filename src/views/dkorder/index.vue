@@ -15,6 +15,8 @@
       fit
       highlight-current-row
       style="width: 100%;"
+
+      :height="scrollerHeight"
       @sort-change="sortChange"
     >
       <el-table-column v-if="showReviewer" label="ID" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
@@ -40,14 +42,19 @@
           <span>{{ row.platformIdName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="平台状态" min-width="40px">
+      <el-table-column label="平台状态" min-width="50px">
         <template slot-scope="{row}">
           <el-tag :type="row.status|statusFilter1| statusFilter">
             {{ row.status|statusFilter1 }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column v-if="listQuery.roleId==1" label="代理等级" min-width="40px">
+      <el-table-column label="平台公告" min-width="200px">
+        <template slot-scope="{row}">
+          <span>{{ row.memo }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column v-if="listQuery.roleId==1" label="代理等级" min-width="50px">
         <template slot-scope="{row}">
           <span>{{ row.roleIdName }}</span>
         </template>
@@ -111,6 +118,7 @@ export default {
       roleId: store.getters.roleId,
       sdate: '',
       selectVal: '2',
+      scrollerHeight: '400px',
       selectRoleOptions: null,
       selectPlatOptions: null,
       sysPrice: null,
@@ -135,8 +143,12 @@ export default {
   created() {
     this.getList()
     this.initData()
+    this.hh()
   },
   methods: {
+    hh() {
+      this.scrollerHeight = window.innerHeight - 270 + 'px'
+    },
     // v-el-drag-dialog onDrag callback function
     handleDrag() {
       this.$refs.select.blur()

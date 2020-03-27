@@ -14,6 +14,7 @@
       fit
       highlight-current-row
       style="width: 100%;"
+      :height="scrollerHeight"
       @sort-change="sortChange"
     >
       <el-table-column v-if="showReviewer" label="ID" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
@@ -93,6 +94,7 @@
         fit
         highlight-current-row
         style="width: 100%;"
+        height="200px"
         @sort-change="sortChange"
       >
         <el-table-column v-if="showReviewer" label="ID" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
@@ -227,6 +229,7 @@ export default {
         orderId: this.orderId
 
       },
+      scrollerHeight: '400px',
       zfUrl: '',
       payStatus: 0,
       payData: {
@@ -260,6 +263,7 @@ export default {
     clearInterval(this.zftimer)
   },
   created() {
+    this.hh()
     const orderId = this.$route.params && this.$route.params.orderId
     this.orderId = orderId
     // console.log(this.$route.query)
@@ -276,6 +280,9 @@ export default {
     // this.setTagsViewTitle()
   },
   methods: {
+    hh() {
+      this.scrollerHeight = window.innerHeight - 270 + 'px'
+    },
     setTagsViewTitle() {
       const title = `支付订单`
       const route = Object.assign({}, this.tempRoute, { title: `${title}` })

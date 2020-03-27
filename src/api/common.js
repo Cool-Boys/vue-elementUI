@@ -39,6 +39,13 @@ export function getPayData(data) {
   })
 }
 
+export function modPwd(data) {
+  return request({
+    url: '/common/modPwd',
+    method: 'post',
+    data
+  })
+}
 export function getPayDataStatus(data) {
   return request({
     url: '/common/getPayDataStatus',
@@ -62,3 +69,12 @@ export function getPayAmountDataStatus(data) {
     data
   })
 }
+
+export function getTotal(query) {
+  return request({
+    url: '/common/getTotal',
+    method: 'get',
+    params: query
+  })
+}
+

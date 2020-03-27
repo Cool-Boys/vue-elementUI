@@ -37,3 +37,10 @@ export function deleteData(query) {
     params: query
   })
 }
+export function getNotice(query) {
+  return request({
+    url: '/Tnotice/getNotice',
+    method: 'get',
+    params: query
+  })
+}

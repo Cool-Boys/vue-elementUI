@@ -6,7 +6,7 @@
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.8)"
   >
-    <el-tag effect="dark" type="info"> 平台价格：视频单价:{{ sysPrice.spprice|rounding }},考试单价:{{ sysPrice.ksprice|rounding }},秒刷单价:{{ sysPrice.msprice|rounding }},专属IP:{{ sysPrice.ipprice|rounding }}</el-tag>
+    <el-tag v-if="spprice!==null" effect="dark" type="info"> 平台价格：视频单价:{{ sysPrice.spprice|rounding }},考试单价:{{ sysPrice.ksprice|rounding }},秒刷单价:{{ sysPrice.msprice|rounding }},专属IP:{{ sysPrice.ipprice|rounding }}</el-tag>
     <el-row :gutter="8" style="margin-top:5px;">
       <el-col :span="10">
         <el-card class="box-card">
@@ -164,11 +164,12 @@ export default {
     // https://github.com/PanJiaChen/vue-element-admin/issues/1221
     this.tempRoute = Object.assign({}, this.$route)
     // set tagsview title
+    this.fetchData()
     this.handleUsers()
   },
-  mounted() {
-    this.fetchData()
-  },
+  // mounted() {
+  //   this.fetchData()
+  // },
   methods: {
     fetchData() {
       getPriceRetail({ userId: store.getters.userId }).then(

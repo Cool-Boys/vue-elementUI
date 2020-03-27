@@ -6,7 +6,7 @@
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.8)"
   >
-    <el-tag effect="dark" type="info"> 平台价格：视频单价:{{ sysPrice.spprice|rounding }},作业单价:{{ sysPrice.zyprice|rounding }},考试单价:{{ sysPrice.ksprice|rounding }},秒刷单价:{{ sysPrice.msprice|rounding }},专属IP:{{ sysPrice.ipprice|rounding }}</el-tag>
+    <el-tag v-if="spprice!==null" effect="dark" type="info"> 平台价格：视频单价:{{ sysPrice.spprice|rounding }},作业单价:{{ sysPrice.zyprice|rounding }},考试单价:{{ sysPrice.ksprice|rounding }},秒刷单价:{{ sysPrice.msprice|rounding }},专属IP:{{ sysPrice.ipprice|rounding }}</el-tag>
     <el-row :gutter="20" style="margin-top:5px;">
       <el-col :span="8">
         <el-card class="box-card">
@@ -77,7 +77,11 @@
     </el-row>
 
     <el-dialog
-      title="提示"
+      v-loading="loading"
+      element-loading-text="不要急,玩命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
+      title="下单明细"
       :visible.sync="dialogVisible"
       width="40%"
     >
@@ -202,7 +206,7 @@ export default {
     },
     handleUsers() {
       this.loading = true
-      console.log(this.userInfos.split('\n').length)
+      // console.log(this.userInfos.split('\n').length)
       if (this.userInfos.split('\n').length > 10) {
         this.$message.error('不要超过10个账号好吗？')
       } else {
@@ -277,12 +281,12 @@ export default {
         })
         this.orderDetail.push(temp)
       })
-      console.log(this.order)
-      console.log(this.orderDetail)
+
       this.loading = true
       saveOrder({ order: JSON.stringify(this.order), orderDetail: JSON.stringify(this.orderDetail) }).then(response => {
         this.loading = false
-        if (response.data === 1) {
+        console.log('保存结果' + response.data)
+        if (response.data > 0) {
           this.dialogVisible = false
         }
       }).catch(function(error) {

@@ -11,6 +11,7 @@
       fit
       highlight-current-row
       style="width: 100%;"
+      :height="scrollerHeight"
       @sort-change="sortChange"
     >
       <el-table-column v-if="showReviewer" label="ID" prop="id" sortable="custom" align="center" width="80" :class-name="getSortClass('id')">
@@ -58,7 +59,7 @@
     <el-dialog title="订单明细" :visible.sync="dialogDetailFormVisible">
       <el-table
         :key="tableKey"
-        v-loading="listLoading"
+        v-loading="listLoading2"
         :data="list"
         border
         fit
@@ -149,7 +150,7 @@ export default {
     },
     statusFilter1(status) {
       const statusMap = {
-        '-1': '未成功',
+        '-1': '未支付',
         0: '安排中',
         1: '进行中',
         2: '完成'
@@ -161,7 +162,7 @@ export default {
         完成: 'success',
         安排中: 'info',
         进行中: 'warning',
-        未成功: 'danger'
+        未支付: 'danger'
       }
       return statusMap[status]
     },
@@ -191,6 +192,7 @@ export default {
       orderList: null,
       total: 0,
       listLoading: true,
+      listLoading2: true,
       orderId: '',
       listQuery: {
         page: 1,
@@ -200,6 +202,7 @@ export default {
       type: '1',
       sdate: '',
       zftimer: '',
+      scrollerHeight: '400px',
       selectPlatOptions: null,
       showReviewer: false,
       dialogFormVisible: false,
@@ -230,13 +233,18 @@ export default {
     // }).catch(function(error) {
     //   console.log(error)
     // })
+
+    this.hh()
     this.getOrderList()
     // this.getList()
   },
   methods: {
 
+    hh() {
+      this.scrollerHeight = window.innerHeight - 270 + 'px'
+    },
     getList(id) {
-      this.listLoading = true
+      this.listLoading2 = true
       this.dialogDetailFormVisible = true
       getDetailById({ orderId: id }).then(response => {
         this.list = response.data.list
@@ -244,7 +252,7 @@ export default {
 
         // Just to simulate the time of the request
         setTimeout(() => {
-          this.listLoading = false
+          this.listLoading2 = false
         }, 1 * 500)
       })
     },

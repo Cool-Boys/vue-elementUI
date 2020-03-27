@@ -1,33 +1,36 @@
 <template>
   <el-card style="margin-bottom:20px;">
     <div slot="header" class="clearfix">
-      <span>About me</span>
+      <span>用户信息</span>
     </div>
 
     <div class="user-profile">
       <div class="box-center">
         <pan-thumb :image="user.avatar" :height="'100px'" :width="'100px'" :hoverable="false">
-          <div>Hello</div>
-          {{ user.role }}
+          <div style=" font-size: 12px;">账户余额</div>
+          <el-tag> {{ user.account.amount }}</el-tag>
         </pan-thumb>
       </div>
       <div class="box-center">
         <div class="user-name text-center">{{ user.name }}</div>
-        <div class="user-role text-center text-muted">{{ user.role | uppercaseFirst }}</div>
+        <div class="user-role text-center text-muted">  <el-tag v-if="user.account.groupIdName" type="danger">{{ user.account.groupIdName }}</el-tag> 我的邀请码:{{ user.account.incode }}</div>
       </div>
     </div>
 
     <div class="user-bio">
       <div class="user-education user-bio-section">
-        <div class="user-bio-section-header"><svg-icon icon-class="education" /><span>Education</span></div>
+        <div class="user-bio-section-header"><svg-icon icon-class="education" /><span>公告</span></div>
         <div class="user-bio-section-body">
-          <div class="text-muted">
-            JS in Computer Science from the University of Technology
+          <div v-if="notice==''" class="text-muted">
+            无
+          </div>
+          <div v-else class="text-muted">
+            {{ notice.content }}
           </div>
         </div>
       </div>
 
-      <div class="user-skills user-bio-section">
+      <!-- <div class="user-skills user-bio-section">
         <div class="user-bio-section-header"><svg-icon icon-class="skill" /><span>Skills</span></div>
         <div class="user-bio-section-body">
           <div class="progress-item">
@@ -47,16 +50,30 @@
             <el-progress :percentage="100" status="success" />
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </el-card>
 </template>
 
 <script>
 import PanThumb from '@/components/PanThumb'
+import { getNotice } from '@/api/notice'
 
 export default {
   components: { PanThumb },
+  filters: {
+    roleFilter(status) {
+      const statusMap = {
+        1: '管理员',
+        2: '一级代理',
+
+        3: '二级代理',
+        4: '普通代理',
+        5: '零售用户'
+      }
+      return statusMap[status]
+    }
+  },
   props: {
     user: {
       type: Object,
@@ -69,6 +86,16 @@ export default {
         }
       }
     }
+  },
+  data() {
+    return {
+      notice: ''
+    }
+  },
+  created() {
+    getNotice().then(response => {
+      this.notice = response.data
+    })
   }
 }
 </script>

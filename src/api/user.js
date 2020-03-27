@@ -16,6 +16,13 @@ export function getInfo(token) {
   })
 }
 
+export function checkUser(query) {
+  return request({
+    url: '/tusers/checkUser',
+    method: 'get',
+    params: query
+  })
+}
 export function logout() {
   return request({
     url: '/logout',
