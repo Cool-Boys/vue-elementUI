@@ -81,7 +81,7 @@ const actions = {
         commit('SET_ROLEID', resData.roleId)
         commit('SET_ROLES', roles)
         commit('SET_NAME', sname)
-        commit('SET_AVATAR', 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif')
+        commit('SET_AVATAR', 'http://im6.leaderhero.com/emotion/6059/2012011064/7ec3ebea66.gif')
         commit('SET_INTRODUCTION', 'admin')
         resolve(resData)
       }).catch(error => {

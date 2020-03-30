@@ -2,32 +2,18 @@
   <div class="dashboard-editor-container">
     <div class=" clearfix">
       <pan-thumb :image="avatar" style="float: left">
-        Your roles:
-        <span v-for="item in roles" :key="item" class="pan-info-roles">{{ item }}</span>
+        账户余额:
+        <span class="pan-info-roles">{{ account.amount }}</span>
       </pan-thumb>
       <github-corner style="position: absolute; top: 0px; border: 0; right: 0;" />
       <div class="info-container">
         <span class="display_name">{{ name }}</span>
-        <span style="font-size:20px;padding-top:20px;display:inline-block;">
-          <count-down
-            :current-time="1481450110"
-            :start-time="1481450110"
-            :end-time="1481450115"
-            :tip-text="'距离开始文字1'"
-            :tip-text-end="'距离结束文字1'"
-            :end-text="'结束自定义文字2'"
-            :day-txt="'天'"
-            :hour-txt="'小时'"
-            :minutes-txt="'分钟'"
-            :seconds-txt="'秒'"
-            @start_callback="countDownS_cb(1)"
-            @end_callback="countDownE_cb(1)"
-          />
-
-        </span>
+        <span />
 
       </div>
+
     </div>
+
     <div>
       <img :src="emptyGif" class="emptyGif">
     </div>
@@ -38,21 +24,32 @@
 import { mapGetters } from 'vuex'
 import PanThumb from '@/components/PanThumb'
 import GithubCorner from '@/components/GithubCorner'
-import CountDown from 'vue2-countdown'
+import { getNotice } from '@/api/notice'
+import store from '@/store'
 export default {
   name: 'DashboardEditor',
-  components: { PanThumb, GithubCorner, CountDown },
+  components: { PanThumb, GithubCorner },
   data() {
     return {
-      emptyGif: 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3'
+      emptyGif: 'https://tva2.sinaimg.cn/mw690/bcc93f49gw1f5olexckuig20b40b4hdt.gif'
     }
   },
   computed: {
     ...mapGetters([
       'name',
       'avatar',
-      'roles'
+      'roles',
+      'account'
     ])
+  },
+  created() {
+    const regEx = /\s+/g
+    const str = '你  好   吗，谢   谢'
+    const str1 = str.replace(regEx, ' ')
+    console.log(str1)
+    getNotice({ userId: store.getters.userId }).then(response => {
+      this.notice = response.data
+    })
   },
   methods: {
     countDownS_cb: function(x) {

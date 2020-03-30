@@ -208,8 +208,16 @@ export default {
       this.loading = true
       // console.log(this.userInfos.split('\n').length)
       if (this.userInfos.split('\n').length > 10) {
-        this.$message.error('不要超过10个账号好吗？')
+        this.$message({
+          showClose: true,
+          message: '不要超过10个账号好吗？',
+          type: 'error'
+
+        })
       } else {
+        // const regEx = /\s+/g
+        // const tempInfos = this.userInfos.replace(regEx, ' ')
+
         getCourseInfo({ accounts: this.userInfos, platformId: this.platformId }).then(response => {
           for (let index = 0; index < response.data.length; index++) {
             const element = response.data[index]

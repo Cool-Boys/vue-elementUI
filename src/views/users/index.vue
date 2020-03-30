@@ -220,7 +220,7 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        pagesize: 20,
+        pagesize: 10,
         sname: undefined,
         userId: store.getters.userId
       },

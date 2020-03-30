@@ -109,7 +109,7 @@ export const asyncRoutes = [
     path: '/documentation',
     component: Layout,
     name: 'documentation',
-    redirect: '/documentation/index',
+    redirect: 'noRedirect',
     alwaysShow: true,
     meta: {
       title: '系统管理',
@@ -122,7 +122,7 @@ export const asyncRoutes = [
         component: () => import('@/views/notice/index'),
         name: 'Notice',
         meta: { title: '公告管理', icon: 'documentation',
-          roles: ['1'] }
+          roles: ['1', '2'] }
       },
       {
         path: 'role',
@@ -150,9 +150,9 @@ export const asyncRoutes = [
   {
     path: '/guide',
     component: Layout,
-    redirect: '/guide/index',
+    redirect: 'noRedirect',
     alwaysShow: true,
-    meta: { title: '财务管理', icon: 'guide', noCache: true, roles: ['1', '2', '3', '4'] },
+    meta: { title: '财务管理', icon: 'guide', noCache: true, roles: ['1', '2', '3', '4', '5'] },
     children: [
       {
         path: 'index',
@@ -172,13 +172,15 @@ export const asyncRoutes = [
         path: 'rechIndex',
         component: () => import('@/views/rechrecord/rechIndex'),
         name: 'rechIndex',
-        meta: { title: '在线充值', noCache: true }
+        meta: { title: '在线充值', noCache: true,
+          roles: ['1', '2', '4', '5'] }
       },
       {
         path: 'rechList',
         component: () => import('@/views/rechrecord/list'),
         name: 'rechList',
-        meta: { title: '在线充值记录', noCache: true }
+        meta: { title: '在线充值记录', noCache: true,
+          roles: ['1', '2', '4', '5'] }
       }
     ]
   },
@@ -200,7 +202,7 @@ export const asyncRoutes = [
   {
     path: '/permission',
     component: Layout,
-    redirect: '/permission/page',
+    redirect: 'noRedirect',
     alwaysShow: true, // will always show the root menu
     name: 'Permission',
     meta: {
@@ -225,6 +227,7 @@ export const asyncRoutes = [
   {
     path: '/dkorder',
     component: Layout,
+    redirect: 'noRedirect',
     meta: {
       title: '代看下单',
       icon: 'lock' // you can set roles in root nav

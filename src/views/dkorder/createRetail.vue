@@ -94,7 +94,7 @@
         :gutter="20"
         style="margin-top:5px;"
       >
-        <el-tag effect="dark" type="info">{{ sysPrice.platformIdName }}平台价格：视频单价:{{ sysPrice.spprice }},考试单价:{{ sysPrice.ksprice }},秒刷单价:{{ sysPrice.msprice }},专属IP:{{ sysPrice.ipprice|rounding }}</el-tag>
+        <el-tag v-if="spprice!==null" effect="dark" type="info">{{ sysPrice.platformIdName }}平台价格：视频单价:{{ sysPrice.spprice }},考试单价:{{ sysPrice.ksprice }},秒刷单价:{{ sysPrice.msprice }},专属IP:{{ sysPrice.ipprice|rounding }}</el-tag>
       </el-row>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">在看看</el-button>
@@ -255,9 +255,15 @@ export default {
       this.checkDataList.forEach(element => {
         const temp = {}
         const arr = element.info.split(' ')
-        temp['school'] = arr[0]
-        temp['userAccount'] = arr[1]
-        temp['userPwd'] = arr[2]
+        if (arr.length === 2) {
+          temp['userAccount'] = arr[0]
+          temp['userPwd'] = arr[1]
+        } else {
+          temp['school'] = arr[0]
+          temp['userAccount'] = arr[1]
+          temp['userPwd'] = arr[2]
+        }
+
         temp['course'] = element.courseName
         temp['isip'] = this.ipChecked ? '1' : '0'
         temp['isvedio'] = '0'
@@ -277,8 +283,6 @@ export default {
         })
         this.orderDetail.push(temp)
       })
-      console.log(this.order)
-      console.log(this.orderDetail)
       this.loading = true
       saveOrder({ order: JSON.stringify(this.order), orderDetail: JSON.stringify(this.orderDetail) }).then(response => {
         this.loading = false

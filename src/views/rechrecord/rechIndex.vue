@@ -12,7 +12,7 @@
             <span>充值30得100</span>
             <div class="bottom clearfix">
               <time class="time">这便宜不占？</time>
-              <el-button type="text" class="button" @click="handleSelPay(30)">GO</el-button>
+              <el-button v-waves type="text" class="button" @click="handleSelPay(30)">GO</el-button>
             </div>
           </div>
         </el-card>
@@ -75,7 +75,7 @@
             <span>占更多便宜</span>
             <div class="bottom clearfix">
               <time class="time">这便宜不占？</time>
-              <el-button type="text" class="button">我去</el-button>
+              <el-link class="button" type="success" href="tencent://message/?uin=827593830&Site=Sambow&Menu=yes">和客服商量去吧</el-link>
             </div>
           </div>
         </el-card>
@@ -104,13 +104,19 @@
       <el-card shadow="never" :body-style="{ padding: '5px','text-align':'center' }">
         <el-row :gutter="20">
           <el-col :span="8">
-            <el-button type="primary" @click="handlePay(1)">支付宝支付</el-button>
+            <el-tooltip class="item" effect="dark" content="点击后加载二维码" placement="top">
+              <el-button type="primary" @click="handlePay(1)">支付宝支付</el-button>
+            </el-tooltip>
           </el-col>
           <el-col :span="8">
-            <el-button type="success" @click="handlePay(3)">微信支付</el-button>
+            <el-tooltip class="item" effect="dark" content="点击后加载二维码" placement="top">
+              <el-button type="success" @click="handlePay(3)">微信支付</el-button>
+            </el-tooltip>
           </el-col>
           <el-col :span="8">
-            <el-button type="danger" @click="handlePay(2)">QQ支付</el-button>
+            <el-tooltip class="item" effect="dark" content="点击后加载二维码" placement="top">
+              <el-button type="danger" @click="handlePay(2)">QQ支付</el-button>
+            </el-tooltip>
           </el-col>
         </el-row>
         <el-row style="margin:10px 0;">
@@ -349,6 +355,7 @@ export default {
 
   .button {
     padding: 0;
+    font-size: 14pt;
     float: right;
   }
 

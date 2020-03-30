@@ -54,11 +54,11 @@
           <span style="color:red;">{{ row.reviewer }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="权限" width="80px">
+      <!-- <el-table-column label="权限" width="80px">
         <template slot-scope="{row}">
           <svg-icon v-for="n in + row.gkqx" :key="n" icon-class="star" class="meta-item__icon" />
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="状态" class-name="status-col" width="100">
         <template slot-scope="{row}">
           <el-tag :type="row.status|statusFilter1| statusFilter">
@@ -150,6 +150,7 @@ export default {
       listQuery: {
         page: 1,
         pagesize: 20,
+        userId: store.getters.userId,
         sdate: undefined,
         content: undefined
       },
@@ -187,7 +188,7 @@ export default {
         id: undefined,
         content: '',
         sdate: new Date(),
-        gkqx: store.getters.roleId,
+        gkqx: store.getters.userId,
         status: '1'
       },
       dialogFormVisible: false,
@@ -262,7 +263,7 @@ export default {
         sdate: parseTime(new Date()),
         content: '',
         status: '1',
-        gkqx: store.getters.roleId
+        gkqx: store.getters.userId
       }
     },
     handleCreate() {

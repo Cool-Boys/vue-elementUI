@@ -3,67 +3,10 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">92看课</h3>
+        <h3 class="title">92学习网网课云挂机平台</h3>
       </div>
       <!-- type="border-card" -->
       <el-tabs v-model="loginForm.type" :stretch="true" @tab-click="handleClick">
-        <el-tab-pane label="会员登录" name="1">
-          <el-form-item prop="username">
-            <span class="svg-container">
-              <svg-icon icon-class="user" />
-            </span>
-            <el-input
-              ref="username"
-              v-model="loginForm.username"
-              placeholder="用户名"
-              name="username"
-              type="text"
-              tabindex="1"
-              autocomplete="on"
-            />
-          </el-form-item>
-
-          <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
-            <el-form-item prop="password">
-              <span class="svg-container">
-                <svg-icon icon-class="password" />
-              </span>
-              <el-input
-                :key="passwordType"
-                ref="password"
-                v-model="loginForm.password"
-                :type="passwordType"
-                placeholder="密码"
-                name="password"
-                tabindex="2"
-                autocomplete="on"
-                @keyup.native="checkCapslock"
-                @blur="capsTooltip = false"
-                @keyup.enter.native="handleLogin"
-              />
-              <span class="show-pwd" @click="showPwd">
-                <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-              </span>
-            </el-form-item>
-          </el-tooltip>
-
-          <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
-
-          <div style="position:relative">
-            <div class="tips">
-              <span />
-              <span />
-            </div>
-            <div class="tips">
-              <span style="margin-right:18px;" />
-              <span />
-            </div>
-
-            <!-- <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-              第三方登录
-            </el-button> -->
-          </div>
-        </el-tab-pane>
         <el-tab-pane label="学生登录" name="2">
           <el-form-item>
             <el-select v-model="loginForm.platFormId" placeholder="请选择平台" style="width:100%">
@@ -129,8 +72,82 @@
             </el-form-item>
           </el-tooltip>
 
-          <el-button :loading="loading" type="success" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin2">登录</el-button>
+          <el-button :loading="loading" type="success" round style="width:50%;margin-bottom:30px;font-size:16pt;" @click.native.prevent="handleLogin2">登录</el-button>
+          <el-link style="width:45%;margin-bottom:5px;font-size:10pt;" type="danger" :underline="false" href="tencent://message/?uin=827593830&Site=Sambow&Menu=yes">客服qq：827593830</el-link>
+          <div class="title-container">
+            <span class="bottom">
+              1. 92学习网网课云挂机平台，学生登录您的学习账号下单即可拿到学分（稳定安全，绝无不良）。<br>
+              2. 有问题及时私聊客服，会妥善替您解决。<br>
+              3. 请勿相信qq/vx/淘宝代刷人员，他们不专业不安全
+            </span>
+          </div>
         </el-tab-pane>
+        <el-tab-pane label="会员登录" name="1">
+          <el-form-item prop="username">
+            <span class="svg-container">
+              <svg-icon icon-class="user" />
+            </span>
+            <el-input
+              ref="username"
+              v-model="loginForm.username"
+              placeholder="用户名"
+              name="username"
+              type="text"
+              tabindex="1"
+              autocomplete="on"
+            />
+          </el-form-item>
+
+          <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
+            <el-form-item prop="password">
+              <span class="svg-container">
+                <svg-icon icon-class="password" />
+              </span>
+              <el-input
+                :key="passwordType"
+                ref="password"
+                v-model="loginForm.password"
+                :type="passwordType"
+                placeholder="密码"
+                name="password"
+                tabindex="2"
+                autocomplete="on"
+                @keyup.native="checkCapslock"
+                @blur="capsTooltip = false"
+                @keyup.enter.native="handleLogin"
+              />
+              <span class="show-pwd" @click="showPwd">
+                <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+              </span>
+            </el-form-item>
+          </el-tooltip>
+
+          <el-button :loading="loading" type="primary" round style="width:50%;margin-bottom:30px;font-size:16pt;" @click.native.prevent="handleLogin">登录</el-button>
+          <el-link style="width:45%;margin-bottom:5px;font-size:10pt;" type="danger" :underline="false" href="tencent://message/?uin=827593830&Site=Sambow&Menu=yes">客服qq：827593830</el-link>
+
+          <div class="title-container">
+            <span class="bottom">
+              1. 92学习网网课云挂机平台，学生登录您的学习账号下单即可拿到学分（稳定安全，绝无不良）。<br>
+              2. 有问题及时私聊客服，会妥善替您解决。<br>
+              3. 请勿相信qq/vx/淘宝代刷人员，他们不专业不安全
+            </span>
+          </div>
+          <div style="position:relative">
+            <div class="tips">
+              <span />
+              <span />
+            </div>
+            <div class="tips">
+              <span style="margin-right:18px;" />
+              <span />
+            </div>
+
+            <!-- <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
+              第三方登录
+            </el-button> -->
+          </div>
+        </el-tab-pane>
+
       </el-tabs>
 
     </el-form>
@@ -165,11 +182,11 @@ export default {
     }
     return {
       loginForm: {
-        type: '1',
+        type: '2',
         platFormId: '',
         school: '',
-        username: 'admin',
-        password: 'admin'
+        username: '',
+        password: ''
       },
       loginRules: {
         platFormId: [
@@ -181,7 +198,7 @@ export default {
       },
       passwordType: 'password',
       capsTooltip: false,
-      platFormOptions: [{ value: '1', label: '超星\\学习通' }, { value: '2', label: '智慧树\\知到' }],
+      platFormOptions: [{ value: '1', label: '超星\\学习通' }, { value: '2', label: '智慧树\\知到(手机号登录)' }],
       loading: false,
       showDialog: false,
       redirect: undefined,
@@ -404,6 +421,11 @@ $light_gray:#eee;
       margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;
+    }
+    .bottom {
+      font-size: 14px;
+      color: $light_gray;
+      margin: 0px auto 20px auto;
     }
   }
 

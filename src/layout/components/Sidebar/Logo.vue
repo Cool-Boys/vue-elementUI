@@ -24,8 +24,8 @@ export default {
   },
   data() {
     return {
-      title: '92代看下单系统',
-      logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
+      title: '92学习网网课云挂机平台',
+      logo: 'http://106.13.35.129/logo1.png'
     }
   }
 }

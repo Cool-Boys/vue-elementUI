@@ -58,7 +58,7 @@
 <script>
 import PanThumb from '@/components/PanThumb'
 import { getNotice } from '@/api/notice'
-
+import store from '@/store'
 export default {
   components: { PanThumb },
   filters: {
@@ -93,7 +93,7 @@ export default {
     }
   },
   created() {
-    getNotice().then(response => {
+    getNotice({ userId: store.getters.userId }).then(response => {
       this.notice = response.data
     })
   }
